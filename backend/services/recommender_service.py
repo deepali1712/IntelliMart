@@ -42,6 +42,7 @@ class RecommenderService:
         sims = cosine_similarity(query_vec, self.tfidf_matrix).flatten()
 
         # Sort indices by similarity descending
+        sorted_indices = np.argsort(sims)[::-1]
         query_item = self.df.iloc[idx]
         query_name = str(query_item['product_name'])
 

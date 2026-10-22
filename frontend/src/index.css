@@ -1,36 +1,97 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --ink-950: #0f051d;
+  --ink-900: #1e0b36;
+  --ink-800: #2e1052;
+  --sidebar: #0d041a;
+  --workspace: #f8fafc;
+  --cyan-neon: #22d3ee;
+  --pink-neon: #f43f5e;
+  --hot-pink: #ec4899;
+  --violet-glow: #8b5cf6;
+  --blue-royal: #4f46e5;
+}
+
 @layer base {
   body {
-    @apply bg-[#F5F7FB] text-[#1E293B] font-sans antialiased;
+    @apply bg-workspace text-slate-800 font-sans antialiased;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
 }
 
+/* Ambient Hero Gradient Utility */
+.bg-hero-ambient {
+  background: linear-gradient(135deg, #1e0b36 0%, #2e1052 50%, #0f051d 100%);
+}
+
+/* Highlight Text Gradients */
+.text-gradient-cyan {
+  background: linear-gradient(90deg, #22d3ee, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-pink {
+  background: linear-gradient(90deg, #f43f5e, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-brand {
+  background: linear-gradient(90deg, #ffffff 0%, #818cf8 60%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.btn-cta-gradient {
+  background: linear-gradient(90deg, #7c3aed, #ec4899);
+}
+
+.btn-cta-gradient:hover {
+  background: linear-gradient(90deg, #6d28d9, #db2777);
+}
+
+.bg-sidebar-active {
+  background: linear-gradient(90deg, rgba(124, 58, 237, 0.95), rgba(59, 130, 246, 0.95));
+  box-shadow: 0 0 24px rgba(124, 58, 237, 0.55);
+}
+
+/* Tabular numbers for price and metrics */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
 
-/* Custom crisp scrollbar for data tables and panels */
+/* Badge Pop Animation */
+@keyframes badgePop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+.animate-badge-pop {
+  animation: badgePop 300ms ease-out;
+}
+
+/* Custom crisp scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F1F5F9;
-  border-radius: 4px;
+  background: rgba(15, 5, 29, 0.05);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
-  border-radius: 4px;
+  background: rgba(139, 92, 246, 0.35);
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+  background: rgba(139, 92, 246, 0.65);
 }

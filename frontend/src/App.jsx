@@ -1,89 +1,110 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { CartProvider } from "./context/CartContext";
-import { FilterProvider } from "./context/FilterContext";
-import Navbar from "./components/Navbar";
-import AdminLayout from "./components/AdminLayout";
+import React from "react";
+import { AppProvider, useApp } from "./context/AppContext";
 
-// Storefront Pages
-import Home from "./pages/Home";
-import Products from "./pages/Products";
-import ProductDetail from "./pages/ProductDetail";
-import RecommendationsPage from "./pages/RecommendationsPage";
-import Cart from "./pages/Cart";
-import About from "./pages/About";
+// Storefront Components
+import Navbar from "./components/store/Navbar";
+import Hero from "./components/store/Hero";
+import SmartRecommendations from "./components/store/SmartRecommendations";
+import TrendingGrid from "./components/store/TrendingGrid";
+import CatalogView from "./components/store/CatalogView";
+import AboutData from "./components/store/AboutData";
+import CartDrawer from "./components/store/CartDrawer";
+import Footer from "./components/store/Footer";
+import ProductDetailModal from "./components/store/ProductDetailModal";
 
-// Admin Pages
-import AdminOverview from "./pages/admin/AdminOverview";
-import AdminDataset from "./pages/admin/AdminDataset";
-import AdminOlap from "./pages/admin/AdminOlap";
-import AdminClassification from "./pages/admin/AdminClassification";
-import AdminClustering from "./pages/admin/AdminClustering";
-import AdminSentiment from "./pages/admin/AdminSentiment";
-import AdminAssociationRules from "./pages/admin/AdminAssociationRules";
-import AdminRegression from "./pages/admin/AdminRegression";
-import AdminPrediction from "./pages/admin/AdminPrediction";
-import AdminDocs from "./pages/admin/AdminDocs";
+// Common Components
+import Toast from "./components/common/Toast";
 
-function StorefrontLayout({ children }) {
+// DWM Workstation Components (Ultraleads-Style)
+import TopNav from "./components/dwm/TopNav";
+import Overview from "./components/dwm/Overview";
+import DatasetExplorer from "./components/dwm/DatasetExplorer";
+import CustomDataSlicer from "./components/dwm/CustomDataSlicer";
+import RatingTierClassifier from "./components/dwm/RatingTierClassifier";
+import Segmentation from "./components/dwm/Segmentation";
+import SentimentInsights from "./components/dwm/SentimentInsights";
+import CrossSell from "./components/dwm/CrossSell";
+import PriceDiscountTrends from "./components/dwm/PriceDiscountTrends";
+import SalesForecaster from "./components/dwm/SalesForecaster";
+
+function MainContent() {
+  const { state } = useApp();
+
+  const scrollToRecommendations = () => {
+    const el = document.getElementById("recommendations");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#F5F7FB]">
-      <Navbar />
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-6">
-        {children}
-      </main>
-      <footer className="bg-[#101828] text-gray-400 py-8 text-xs border-t border-gray-800 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            <span className="font-bold text-white text-sm">IntelliMart</span> — Data Warehousing & Data Mining Project
-            <p className="text-[11px] text-gray-500 mt-0.5">
-              Powered by Kaggle Amazon Product Catalog dataset (1,465 authentic records).
-            </p>
-          </div>
-          <div className="flex gap-4">
-            <a href="/about" className="hover:text-white transition">About & Data</a>
-            <a href="/admin" className="hover:text-white transition">Admin DWM Center</a>
-            <a href="/admin/docs" className="hover:text-white transition">Viva Guide</a>
+    <div className="min-h-screen font-sans antialiased">
+      {/* Toast Notification Container */}
+      <Toast />
+
+      {/* Global Shopping Cart Slide-over */}
+      <CartDrawer />
+
+      {/* Amazon/Flipkart-style Product Detail Modal */}
+      <ProductDetailModal />
+
+      {/* VIEW 1: STOREFRONT VIEW (PURPLE AMBIENT THEME) */}
+      {state.view === "store" && (
+        <div className="min-h-screen flex flex-col bg-[#f8fafc]">
+          {/* Top Sticky Navbar */}
+          <Navbar onScrollToRecommendations={scrollToRecommendations} />
+
+          {/* Main Content Area based on storeTab */}
+          <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+            {state.storeTab === "storefront" && (
+              <>
+                <Hero onScrollToRecommendations={scrollToRecommendations} />
+                <SmartRecommendations />
+                <TrendingGrid />
+              </>
+            )}
+
+            {state.storeTab === "catalog" && <CatalogView />}
+
+            {state.storeTab === "about" && <AboutData />}
+          </main>
+
+          {/* Dark Footer */}
+          <Footer />
+        </div>
+      )}
+
+      {/* VIEW 2: DWM CENTER (NEW ULTRALEADS-STYLE GLASS DASHBOARD) */}
+      {state.view === "dwm" && (
+        <div className="min-h-screen bg-gradient-to-br from-[#e9edf3] via-[#f1f4f8] to-[#f4f7fb] py-6 sm:py-8 px-3 sm:px-6 lg:px-8">
+          {/* Large Centered Frosted Glass Dashboard Container */}
+          <div className="max-w-[1440px] mx-auto rounded-[28px] bg-white/70 backdrop-blur-xl border border-white/80 shadow-[0_20px_60px_rgba(30,60,110,0.12)] overflow-hidden transition-all duration-300">
+            {/* Ultraleads Top Navigation Bar */}
+            <TopNav />
+
+            {/* Dashboard Workspace Content */}
+            <main className="p-4 sm:p-6 lg:p-8">
+              {state.dwmSection === "overview" && <Overview />}
+              {state.dwmSection === "explorer" && <DatasetExplorer />}
+              {state.dwmSection === "slicer" && <CustomDataSlicer />}
+              {state.dwmSection === "classifier" && <RatingTierClassifier />}
+              {state.dwmSection === "segmentation" && <Segmentation />}
+              {state.dwmSection === "sentiment" && <SentimentInsights />}
+              {state.dwmSection === "cross-sell" && <CrossSell />}
+              {state.dwmSection === "trends" && <PriceDiscountTrends />}
+              {state.dwmSection === "forecaster" && <SalesForecaster />}
+            </main>
           </div>
         </div>
-      </footer>
+      )}
     </div>
   );
 }
 
 export default function App() {
   return (
-    <Router>
-      <CartProvider>
-        <FilterProvider>
-          <Routes>
-            {/* Storefront Routes */}
-            <Route path="/" element={<StorefrontLayout><Home /></StorefrontLayout>} />
-            <Route path="/products" element={<StorefrontLayout><Products /></StorefrontLayout>} />
-            <Route path="/products/:id" element={<StorefrontLayout><ProductDetail /></StorefrontLayout>} />
-            <Route path="/recommendations" element={<StorefrontLayout><RecommendationsPage /></StorefrontLayout>} />
-            <Route path="/cart" element={<StorefrontLayout><Cart /></StorefrontLayout>} />
-            <Route path="/about" element={<StorefrontLayout><About /></StorefrontLayout>} />
-
-            {/* Admin Intelligence Center Routes */}
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<AdminOverview />} />
-              <Route path="dataset" element={<AdminDataset />} />
-              <Route path="olap" element={<AdminOlap />} />
-              <Route path="classification" element={<AdminClassification />} />
-              <Route path="clustering" element={<AdminClustering />} />
-              <Route path="sentiment" element={<AdminSentiment />} />
-              <Route path="association-rules" element={<AdminAssociationRules />} />
-              <Route path="regression" element={<AdminRegression />} />
-              <Route path="recommendations" element={<RecommendationsPage />} />
-              <Route path="prediction" element={<AdminPrediction />} />
-              <Route path="docs" element={<AdminDocs />} />
-            </Route>
-
-            {/* Catch-all redirect */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </FilterProvider>
-      </CartProvider>
-    </Router>
+    <AppProvider>
+      <MainContent />
+    </AppProvider>
   );
 }
